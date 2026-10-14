@@ -1,23 +1,23 @@
 {
   // Cloudflare Worker + static assets for lifelegallysingle.com
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lifelegallysingle",
+  "name": "lifelegallysingle-micro-oct26",
   "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    // Worker runs first so every response gets security + cache headers
-    // and old WordPress URLs get redirected.
     "run_worker_first": true
   },
   "observability": { "enabled": true },
-  // Before the first deploy: delete the existing A/AAAA records for
-  // lifelegallysingle.com and www in Cloudflare DNS (they point to Lightsail).
-  // Custom domains create their own DNS records.
-  "routes": [
-    { "pattern": "lifelegallysingle.com", "custom_domain": true },
-    { "pattern": "www.lifelegallysingle.com", "custom_domain": true }
-  ]
+  // STEP 1 (now): test on the free workers.dev address.
+  "workers_dev": true,
+  "preview_urls": true
+  // STEP 2 (after deleting the old @ and www A records in DNS):
+  // add a comma after "preview_urls": true above, then uncomment:
+  // "routes": [
+  //   { "pattern": "lifelegallysingle.com", "custom_domain": true },
+  //   { "pattern": "www.lifelegallysingle.com", "custom_domain": true }
+  // ]
 }
