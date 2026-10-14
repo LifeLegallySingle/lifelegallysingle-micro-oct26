@@ -8,6 +8,9 @@ export const TITLE = `${SITE.tagline} | ${SITE.brand}`;
 export const DESCRIPTION =
   'Being Single is a Power Move: the Life Legally Single™ manifesto. Write your declaration, pick your Power Moves, and get the full playbook at legallysingle.com.';
 
+// Official site icon used on legallysingle.com
+const SITE_ICON = 'https://legallysingle.com/wp-content/uploads/2025/12/cropped-LOGO-270x270.png';
+
 const ORG_ID = `${MAIN.origin}/#organization`; // the entity lives on the main site
 const SITE_ID = `${SITE.origin}/#website`;
 const PAGE_ID = `${SITE.origin}/#webpage`;
@@ -111,9 +114,10 @@ export function buildHead() {
     `<meta name="theme-color" content="${SITE.themeColor}">`,
     `<meta name="color-scheme" content="dark">`,
     `<meta name="author" content="${esc(SITE.brand)}">`,
-    `<link rel="icon" href="/favicon.svg" type="image/svg+xml">`,
-    `<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">`,
-    `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`,
+    // Same site icon as legallysingle.com: one logo across the platform.
+    `<link rel="icon" href="${SITE_ICON}" sizes="270x270" type="image/png">`,
+    `<link rel="apple-touch-icon" href="${SITE_ICON}">`,
+    `<meta name="msapplication-TileImage" content="${SITE_ICON}">`,
     `<link rel="manifest" href="/site.webmanifest">`,
     // Point LLM crawlers at the plain-text brief, and humans/crawlers at the main site.
     `<link rel="alternate" type="text/plain" title="LLM brief" href="/llms.txt">`,
