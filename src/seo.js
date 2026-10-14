@@ -1,4 +1,4 @@
-import { SITE, MAIN, cleanMainUrl } from './site.config.js';
+import { SITE, MAIN, LOGO, cleanMainUrl } from './site.config.js';
 import { PILLARS, TERMS, FAQ } from './content.js';
 
 const esc = (s) =>
@@ -28,7 +28,8 @@ export function jsonLd() {
         url: `${MAIN.origin}/`,
         slogan: SITE.tagline,
         description: SITE.description,
-        logo: { '@type': 'ImageObject', url: `${SITE.origin}/icon-512.png`, width: 512, height: 512 },
+        logo: { '@type': 'ImageObject', url: new URL(LOGO.src, SITE.origin).toString() },
+        image: `${SITE.origin}/og.png`,
         ...(MAIN.sameAs.length ? { sameAs: MAIN.sameAs } : {}),
       },
       {

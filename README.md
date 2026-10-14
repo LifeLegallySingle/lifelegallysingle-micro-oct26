@@ -38,6 +38,8 @@ build command `npm run build`, deploy command `npx wrangler deploy`.
 | `src/site.config.js` | Domains, main-site links, Brevo settings |
 | `src/content.js` | All copy: pillars, Power Moves, vocabulary, FAQ (also feeds JSON-LD + llms.txt) |
 | `src/seo.js` | Meta tags, Open Graph, JSON-LD graph, llms.txt |
+| `src/components/PillarOrbit.jsx` | Interactive hero: pillars orbiting the logo |
+| `src/components/Logo.jsx` | Official logo (hotlinked from legallysingle.com) with built-in fallback |
 | `src/components/Declaration.jsx` | Declaration builder + share image |
 | `src/components/BrevoSignup.jsx` | Newsletter form (posts to your Brevo form) |
 | `worker/index.js` | Redirects, 410s for old WordPress paths, security + cache headers |

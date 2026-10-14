@@ -11,7 +11,7 @@ let template = await readFile(resolve(dist, 'index.html'), 'utf8');
 
 // Preload the hero face so the tagline paints in Bodoni on first render.
 const { readdir } = await import('node:fs/promises');
-const heroFont = (await readdir(resolve(dist, 'assets'))).find((f) => /^bodoni-moda-latin-opsz-normal-.*\.woff2$/.test(f));
+const heroFont = (await readdir(resolve(dist, 'assets'))).find((f) => /^inter-tight-latin-wght-normal-.*\.woff2$/.test(f));
 if (heroFont) {
   template = template.replace(
     '</head>',

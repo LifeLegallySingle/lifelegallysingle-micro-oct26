@@ -1,8 +1,7 @@
 import { StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
-import '@fontsource-variable/bodoni-moda/opsz.css';
-import '@fontsource-variable/bodoni-moda/opsz-italic.css';
-import '@fontsource-variable/archivo/index.css';
+import '@fontsource-variable/inter-tight/index.css';
+import '@fontsource-variable/caveat/index.css';
 import './styles.css';
 import { App, NotFound } from './App.jsx';
 

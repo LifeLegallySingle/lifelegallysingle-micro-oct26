@@ -51,7 +51,7 @@ export function BrevoSignup({ id = 'brevo' }) {
             placeholder="you@example.com"
             disabled={state === 'sent'}
           />
-          <button type="submit" className="btn btn-gold" disabled={state === 'sending' || state === 'sent'}>
+          <button type="submit" className="btn btn-primary" disabled={state === 'sending' || state === 'sent'}>
             {state === 'sending' ? 'Subscribing…' : state === 'sent' ? 'Subscribed' : 'Subscribe'}
           </button>
         </div>

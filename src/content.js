@@ -4,6 +4,7 @@
 export const PILLARS = [
   {
     id: 'mind',
+    icon: '🧠',
     name: 'Mind',
     line: 'Your time, your attention, your plans.',
     moves: [
@@ -14,6 +15,7 @@ export const PILLARS = [
   },
   {
     id: 'body',
+    icon: '✨',
     name: 'Body',
     line: 'Care that doesn’t wait for a reason.',
     moves: [
@@ -24,6 +26,7 @@ export const PILLARS = [
   },
   {
     id: 'heart',
+    icon: '💜',
     name: 'Heart',
     line: 'Relationships you choose on purpose.',
     moves: [
@@ -34,6 +37,7 @@ export const PILLARS = [
   },
   {
     id: 'glow',
+    icon: '🌟',
     name: 'Glow',
     line: 'How you show up, for you first.',
     moves: [
@@ -44,6 +48,7 @@ export const PILLARS = [
   },
   {
     id: 'wallet',
+    icon: '💰',
     name: 'Wallet',
     line: 'Money built for a household of one.',
     moves: [

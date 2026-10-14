@@ -10,7 +10,15 @@ export const SITE = {
   description:
     'Being Single is a Power Move. Life Legally Single™ helps solo and single earners build a life on purpose across five pillars: Mind, Body, Heart, Glow, and Wallet. Guides, tools, and the Freedom Tax™ calculator live at legallysingle.com.',
   locale: 'en_US',
-  themeColor: '#080808',
+  themeColor: '#0e0a1a',
+  socialProof: 'Join 200K+ SoloAchievers™ thriving solo with the Self-Partnered System™.',
+};
+
+// Official logo. Hotlinked from legallysingle.com so it always matches the main site.
+// For extra resilience, download it into /public/logo.png and set src: '/logo.png'.
+export const LOGO = {
+  src: 'https://legallysingle.com/wp-content/uploads/2025/12/cropped-LOGO.png',
+  alt: 'Life Legally Single logo',
 };
 
 // The main site owns ALL topical SEO. Every deep link points there.
@@ -20,16 +28,34 @@ export const MAIN = {
   // Leave '/' if a page doesn't exist yet.
   paths: {
     home: '/',
-    freedomTax: '/', // e.g. '/freedom-tax-calculator/'
-    selfPartnered: '/', // e.g. '/self-partnered-system/'
-    powerMoves: '/', // e.g. '/power-moves/'
-    pillars: { mind: '/', body: '/', heart: '/', glow: '/', wallet: '/' },
+    freedomTax: '/freedom-tax-calculator/',
+    selfPartnered: '/self-partnered-system/',
+    powerMoves: '/#lls-power-move',
+    joinCreator: '/join-as-creator/',
+    // All pillars point to the main site's Power Move picker until each has its own page.
+    pillars: {
+      mind: '/#lls-power-move',
+      body: '/#lls-power-move',
+      heart: '/#lls-power-move',
+      glow: '/#lls-power-move',
+      wallet: '/unweddedwallet/',
+    },
     privacy: '/privacy-policy/',
   },
   // Brand social profiles (JSON-LD sameAs). Full URLs.
   sameAs: [
-    // 'https://www.instagram.com/…',
-    // 'https://www.tiktok.com/@…',
+    'https://www.facebook.com/lifelegallysingle/',
+    'https://x.com/singleceleb',
+    // add Instagram / TikTok / Bluesky profile URLs here
+  ],
+  // Destinations shown in the big "Go to legallysingle.com" section.
+  tools: [
+    { name: 'Freedom Tax Calculator™', path: '/freedom-tax-calculator/', line: 'What single life costs in your city.' },
+    { name: 'UnWedded Wallet™', path: '/unweddedwallet/', line: 'Money built on one income.' },
+    { name: 'Self-Partnered System™', path: '/self-partnered-system/', line: 'The framework behind it all.' },
+    { name: 'Datebase™', path: '/datebase/', line: 'Date with intention.' },
+    { name: 'Solo travel', path: '/solo-travel/', line: 'Trips that match your energy.' },
+    { name: 'Community', path: '/community/', line: 'Find your people.' },
   ],
 };
 

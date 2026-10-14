@@ -1,12 +1,13 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { PILLARS } from '../content.js';
-import { SITE, MAIN, mainUrl } from '../site.config.js';
+import { SITE, MAIN, LOGO, mainUrl } from '../site.config.js';
+import { Logo } from './Logo.jsx';
 
 const W = 1080;
 const H = 1350;
-const C = { ink: '#080808', royal: '#6427b0', gilt: '#f5c842', paper: '#efe9f7', mist: '#a69cb6' };
-const SERIF = '"Bodoni Moda Variable", "Bodoni Moda", Didot, Georgia, serif';
-const SANS = '"Archivo Variable", Archivo, "Helvetica Neue", Arial, sans-serif';
+const C = { night: '#0e0a1a', plum: '#1d1236', royal: '#6427b0', lavender: '#a98bf0', lilac: '#d6c8ff', paper: '#ffffff', mist: '#b7aecb' };
+const SANS = '"Inter Tight Variable", "Inter Tight", "Helvetica Neue", Arial, sans-serif';
+const HAND = '"Caveat Variable", Caveat, cursive';
 
 function wrap(ctx, text, maxWidth) {
   const words = text.split(' ');
@@ -23,139 +24,153 @@ function wrap(ctx, text, maxWidth) {
   return lines;
 }
 
-function drawSeal(ctx, cx, cy, r) {
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(-0.14);
-  const g = ctx.createRadialGradient(-r * 0.3, -r * 0.35, r * 0.1, 0, 0, r * 1.1);
-  g.addColorStop(0, '#ffe48a');
-  g.addColorStop(0.55, C.gilt);
-  g.addColorStop(1, '#b88a17');
-  ctx.fillStyle = g;
-  for (let i = 0; i < 36; i++) {
-    const t = (i / 36) * Math.PI * 2;
-    ctx.beginPath();
-    ctx.arc(r * Math.cos(t), r * Math.sin(t), r * 0.1, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.beginPath();
-  ctx.arc(0, 0, r, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = C.royal;
-  ctx.beginPath();
-  ctx.arc(0, 0, r * 0.64, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = C.gilt;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(0, 0, r * 0.58, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.fillStyle = C.gilt;
+function loadLogo() {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = LOGO.src;
+  });
+}
+
+function drawLogoMark(ctx, x, y, s) {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(x, y, s, s);
+  ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
-  ctx.font = `800 ${Math.round(r * 0.42)}px ${SERIF}`;
-  ctx.fillText('LLS', 0, r * 0.12);
-  ctx.fillStyle = C.paper;
-  ctx.font = `italic 500 ${Math.round(r * 0.14)}px ${SERIF}`;
-  ctx.fillText('power move', 0, r * 0.36);
-  ctx.restore();
+  ctx.font = `800 ${s * 0.34}px ${SANS}`;
+  ctx.fillText('LIFE', x + s / 2, y + s * 0.48);
+  ctx.textAlign = 'left';
+  ctx.font = `700 ${s * 0.125}px ${SANS}`;
+  ctx.fillText('Legally', x + s * 0.09, y + s * 0.64);
+  ctx.fillText('Single', x + s * 0.54, y + s * 0.64);
+  ctx.fillRect(x + s * 0.53, y + s * 0.6, s * 0.39, Math.max(1, s * 0.014));
+  ctx.fillStyle = C.lavender;
+  ctx.font = `600 ${s * 0.15}px ${HAND}`;
+  ctx.fillText('stronger', x + s * 0.56, y + s * 0.8);
 }
 
 async function renderCard(name, picks) {
   await Promise.all([
-    document.fonts.load(`700 96px ${SERIF}`),
-    document.fonts.load(`italic 500 48px ${SERIF}`),
+    document.fonts.load(`800 96px ${SANS}`),
     document.fonts.load(`500 30px ${SANS}`),
+    document.fonts.load(`600 60px ${HAND}`),
   ]).catch(() => {});
+  const logo = await loadLogo();
   const cv = document.createElement('canvas');
   cv.width = W;
   cv.height = H;
   const ctx = cv.getContext('2d');
 
-  ctx.fillStyle = C.ink;
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, C.plum);
+  bg.addColorStop(1, C.night);
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
-  const glow = ctx.createRadialGradient(W * 0.85, H * 0.1, 40, W * 0.85, H * 0.1, 900);
-  glow.addColorStop(0, 'rgba(100,39,176,0.55)');
+  const glow = ctx.createRadialGradient(W * 0.9, H * 0.05, 40, W * 0.9, H * 0.05, 820);
+  glow.addColorStop(0, 'rgba(100,39,176,0.65)');
   glow.addColorStop(1, 'rgba(100,39,176,0)');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, W, H);
 
-  // Certificate double rule
-  ctx.strokeStyle = C.gilt;
-  ctx.lineWidth = 3;
-  ctx.strokeRect(44, 44, W - 88, H - 88);
-  ctx.lineWidth = 1;
-  ctx.strokeRect(58, 58, W - 116, H - 116);
+  // concentric rings, as on legallysingle.com
+  ctx.strokeStyle = 'rgba(169,139,240,0.16)';
+  ctx.lineWidth = 2;
+  for (const r of [260, 380, 500]) {
+    ctx.beginPath();
+    ctx.arc(W - 40, 120, r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
 
-  const x = 110;
-  const max = W - 220;
-  let y = 170;
+  const x = 96;
+  const max = W - 192;
+  let y = 96;
 
-  ctx.fillStyle = C.gilt;
-  ctx.font = `italic 500 44px ${SERIF}`;
-  ctx.fillText('A declaration', x, y);
+  // logo, or the drawn mark if the logo can't be used on a canvas
+  let drew = false;
+  if (logo) {
+    try {
+      ctx.drawImage(logo, x, y, 120, 120);
+      ctx.getImageData(0, 0, 1, 1); // throws if the canvas is tainted
+      drew = true;
+    } catch {
+      ctx.fillStyle = C.plum;
+      ctx.fillRect(x, y, 120, 120);
+    }
+  }
+  if (!drew) drawLogoMark(ctx, x, y, 120);
 
-  y += 76;
+  y += 200;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = C.lilac;
+  ctx.font = `600 34px ${SANS}`;
+  ctx.fillText(`I, ${name.trim() || 'the undersigned'}, declare:`, x, y);
+
+  y += 12;
   ctx.fillStyle = C.paper;
-  ctx.font = `400 36px ${SERIF}`;
-  ctx.fillText(`I, ${name.trim() || 'the undersigned'}, declare that`, x, y);
-
-  y += 40;
-  ctx.font = `800 100px ${SERIF}`;
-  for (const l of wrap(ctx, `${SITE.tagline}.`, max)) {
+  ctx.font = `800 104px ${SANS}`;
+  for (const l of wrap(ctx, `${SITE.tagline}™`, max)) {
     y += 104;
     ctx.fillText(l, x, y);
   }
 
-  y += 84;
-  ctx.fillStyle = C.gilt;
-  ctx.font = `600 30px ${SANS}`;
-  ctx.fillText('My next moves', x, y);
-  y += 18;
+  y += 80;
+  ctx.fillStyle = C.lavender;
+  ctx.font = `700 26px ${SANS}`;
+  ctx.fillText('MY NEXT POWER MOVES', x, y);
+  y += 14;
 
   for (const p of PILLARS) {
     const move = p.moves[picks[p.id]];
-    y += 50;
-    ctx.fillStyle = C.gilt;
-    ctx.font = `600 28px ${SANS}`;
-    ctx.fillText(p.name, x, y);
+    y += 52;
+    ctx.fillStyle = C.lilac;
+    ctx.font = `700 30px ${SANS}`;
+    ctx.fillText(`${p.icon} ${p.name}`, x, y);
     ctx.fillStyle = C.paper;
-    ctx.font = `400 28px ${SANS}`;
-    const lines = wrap(ctx, move, max - 150);
-    lines.forEach((l, i) => ctx.fillText(l, x + 150, y + i * 36));
-    y += (lines.length - 1) * 36;
+    ctx.font = `500 30px ${SANS}`;
+    const lines = wrap(ctx, move, max - 210);
+    lines.forEach((l, i) => ctx.fillText(l, x + 210, y + i * 38));
+    y += (lines.length - 1) * 38;
   }
 
-  drawSeal(ctx, W - 230, H - 330, 105);
-
-  // Signature
-  const sy = H - 170;
-  ctx.strokeStyle = C.mist;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(x, sy);
-  ctx.lineTo(x + 520, sy);
-  ctx.stroke();
+  const sy = H - 150;
   ctx.fillStyle = C.paper;
-  ctx.font = `italic 500 52px ${SERIF}`;
-  ctx.fillText(name.trim() || ' ', x + 8, sy - 16);
+  ctx.font = `600 72px ${HAND}`;
+  ctx.fillText(name.trim() || ' ', x, sy - 14);
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.fillRect(x, sy, 460, 2);
   ctx.fillStyle = C.mist;
-  ctx.font = `400 24px ${SANS}`;
-  ctx.fillText('Signed, by choice', x, sy + 38);
+  ctx.font = `500 24px ${SANS}`;
+  ctx.fillText('Signed, by choice', x, sy + 40);
 
-  ctx.fillStyle = C.gilt;
-  ctx.font = `600 26px ${SANS}`;
+  ctx.fillStyle = C.lavender;
+  ctx.font = `700 28px ${SANS}`;
   ctx.textAlign = 'right';
-  ctx.fillText('lifelegallysingle.com', W - 110, sy + 38);
+  ctx.fillText('lifelegallysingle.com', W - 96, sy + 40);
 
   return new Promise((res) => cv.toBlob(res, 'image/png'));
 }
 
-export function Declaration() {
+export function Declaration({ focus }) {
   const uid = useId();
   const [name, setName] = useState('');
   const [picks, setPicks] = useState(() => Object.fromEntries(PILLARS.map((p) => [p.id, 0])));
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState('');
+  const refs = useRef({});
+
+  // When a pillar is picked in the hero orbit, bring it into view and flash it.
+  useEffect(() => {
+    if (!focus?.id) return;
+    const el = refs.current[focus.id];
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.querySelector('input:checked')?.focus({ preventScroll: true });
+    el.classList.remove('flash');
+    void el.offsetWidth; // restart the highlight animation
+    el.classList.add('flash');
+  }, [focus]);
 
   async function saveOrShare(mode) {
     setBusy(true);
@@ -203,9 +218,16 @@ export function Declaration() {
         </div>
 
         {PILLARS.map((p) => (
-          <fieldset key={p.id} className="pillar">
+          <fieldset
+            key={p.id}
+            id={`pillar-${p.id}`}
+            ref={(el) => (refs.current[p.id] = el)}
+            className={`pillar${focus?.id === p.id ? ' is-focus' : ''}`}
+          >
             <legend>
-              <span className="pillar-name">{p.name}</span>
+              <span className="pillar-name">
+                <span aria-hidden="true">{p.icon}</span> {p.name}
+              </span>
               <span className="pillar-line">{p.line}</span>
             </legend>
             <div className="chips">
@@ -230,17 +252,27 @@ export function Declaration() {
 
       <figure className="decl-doc" aria-label="Preview of your declaration">
         <div className="decl-sheet">
-          <p className="decl-title">A declaration</p>
+          <div className="decl-top">
+            <Logo size={64} className="decl-logo" />
+            <span className="decl-kicker">Official declaration</span>
+          </div>
           <p className="decl-intro">
-            I, <span className="decl-name">{name.trim() || 'the undersigned'}</span>, declare that
+            I, <span className="decl-name">{name.trim() || 'the undersigned'}</span>, declare:
           </p>
-          <p className="decl-tagline">{SITE.tagline}.</p>
-          <p className="decl-moves-head">My next moves</p>
+          <p className="decl-tagline">
+            {SITE.tagline}
+            <sup>™</sup>
+          </p>
+          <p className="decl-moves-head">My next Power Moves</p>
           <dl className="decl-moves">
             {PILLARS.map((p) => (
               <div key={p.id}>
-                <dt>{p.name}</dt>
-                <dd>{p.moves[picks[p.id]]}</dd>
+                <dt>
+                  <span aria-hidden="true">{p.icon}</span> {p.name}
+                </dt>
+                <dd key={picks[p.id]} className="swap">
+                  {p.moves[picks[p.id]]}
+                </dd>
               </div>
             ))}
           </dl>
@@ -251,7 +283,7 @@ export function Declaration() {
           </div>
         </div>
         <figcaption className="decl-actions">
-          <button type="button" className="btn btn-gold" disabled={busy} onClick={() => saveOrShare('share')}>
+          <button type="button" className="btn btn-primary" disabled={busy} onClick={() => saveOrShare('share')}>
             {busy ? 'Creating image…' : 'Share my declaration'}
           </button>
           <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => saveOrShare('save')}>

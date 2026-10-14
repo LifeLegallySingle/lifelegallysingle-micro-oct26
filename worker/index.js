@@ -9,7 +9,7 @@ const CSP = [
   "default-src 'self'",
   "script-src 'self' https://static.cloudflareinsights.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://legallysingle.com",
   "font-src 'self'",
   "connect-src 'self' https://cloudflareinsights.com",
   // Brevo: the signup form posts to sibforms.com into a hidden iframe
