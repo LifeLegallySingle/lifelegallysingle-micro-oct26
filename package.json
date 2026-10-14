@@ -1,0 +1,24 @@
+{
+  "name": "lifelegallysingle-microsite",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "lifelegallysingle.com — Being Single is a Power Move. Brand showcase that feeds legallysingle.com.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "5.3.0",
+    "@fontsource-variable/bodoni-moda": "5.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.1.1",
+    "vite": "8.3.1",
+    "wrangler": "4.143.0"
+  }
+}
